@@ -20,10 +20,27 @@ let ticketPrice = +movieSelect.value;
 // change the count using innerText
 //calculate the ticket price using the count * ticket price
 
+// Local storage, get index of seats by copy selectedSeats
+// seatsIndex
+//map trough each seat
+//return copy call seats from the dom and use indexOf(seat) to pass the current seats that has been selected
+
+//save selected movie index and price
+setMovieData(movieIndex, moviePrice) {
+    localStorage.setItem('selectedMovieIndex', movieIndex);
+    localStorage.setItem('selectedMoviePrice', moviePrice);
+}
+
 function updateSelectedCount() {
 	const selectedSeats = document.querySelectorAll('.row .seat.selected');
+
+	const seatsIndex = [ ...selectedSeats ].map(function(seat) {
+		return [ ...seats ].indexOf(seat);
+	});
+
+	localStorage.setItem('selectedSeats', JSON.stringify(seatsIndex));
+
 	const selectedSeatsCount = selectedSeats.length;
-	console.log('number of ticket selected:', selectedSeatsCount);
 
 	count.innerText = selectedSeatsCount;
 	total.innerText = selectedSeatsCount * ticketPrice;
@@ -35,12 +52,16 @@ function updateSelectedCount() {
 
 movieSelect.addEventListener('change', (e) => {
 	ticketPrice = +e.target.value;
+	//to get the index of movie and the value of movie = price
+	console.log(e.target.selectedIndex, e.target.value);
+	setMovieData(e.target.selectedIndex, e.target.value);
+
 	updateSelectedCount();
 });
 
 // Add eventListener on the container with click event console.log(e.target)
 // when click on the seat and add classList
-// look for Available seat, find element in th  container that has th class of seat
+// look for Available seats, find element in th  container that has th class of seat
 // && the class that not occupied
 // toggle class so we can unselect the seat aswell
 
