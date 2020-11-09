@@ -25,7 +25,8 @@ body {
 
 .movie-container {
 	background: orange;
-	margin: 20px 0;
+	margin: 20px 5px;
+	padding-left: 5px;
 }
 
 .movie-container select {
@@ -62,7 +63,7 @@ body {
 }
 
 .seat:nth-last-of-type(2) {
-	margin-right: 18px;
+	margin-left: 18px;
 }
 
 /* make hover on available seats */

@@ -1,34 +1,17 @@
-//in css has class of movie.selected,  .seat.selected , .seat.occupied
-// can be used to manipulate the state of event in js
-
-// querySelectorAll will slect all and  put them into a node similar to an array
-//find available seat which has no, click and make them blue, add toggle class do deslected
-//get the count of ticket
-
 const container = document.querySelector('.container');
 const seats = document.querySelectorAll('.row .seat:not(.occupied');
 const count = document.getElementById('count');
 const total = document.getElementById('total');
 const movieSelect = document.getElementById('movie');
 
+populateUI();
+
 let ticketPrice = +movieSelect.value;
 
-//Update total and count
-//queryselect all the seats in the row with the seat with selected class(style in css)
-
-//querySelectorAll will give a nodelist like array and lenght or count of items
-// change the count using innerText
-//calculate the ticket price using the count * ticket price
-
-// Local storage, get index of seats by copy selectedSeats
-// seatsIndex
-//map trough each seat
-//return copy call seats from the dom and use indexOf(seat) to pass the current seats that has been selected
-
-//save selected movie index and price
-setMovieData(movieIndex, moviePrice) {
-    localStorage.setItem('selectedMovieIndex', movieIndex);
-    localStorage.setItem('selectedMoviePrice', moviePrice);
+//save selected movie index and price into localStorage using setItem with key and value pair
+function setMovieData(movieIndex, moviePrice) {
+	localStorage.setItem('selectedMovieIndex', movieIndex);
+	localStorage.setItem('selectedMoviePrice', moviePrice);
 }
 
 function updateSelectedCount() {
@@ -46,11 +29,38 @@ function updateSelectedCount() {
 	total.innerText = selectedSeatsCount * ticketPrice;
 }
 
+// Get data from localstorage and poputale UI, Jason.pars to parse it back to array
+//check if selectedSeats that we get from localStorage is there
+//loop trough seats (all the seats from the dom) with forEach with param seat, index
+//
+function populateUI() {
+	const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats'));
+
+	if (selectedSeats !== null && selectedSeats.length > 0) {
+		seats.forEach((seat, index) => {
+			console.log(seat);
+
+			if (selectedSeats.indexOf(index) > -1) {
+				seat.classList.add('selected');
+			}
+			console.log(selectedSeats);
+		});
+	}
+
+	const selectedMovieIndex = localStorage.getItem('selectedMovieIndex');
+
+	if (selectedMovieIndex !== null) {
+		movieSelect.selectedIndex = selectedMovieIndex;
+	}
+}
+
 // Movie select event, because it is a select list will want to use with change event
 
 // when select different movie, price change , call updateSelectedCount
 
 movieSelect.addEventListener('change', (e) => {
+	e.preventDefault();
+
 	ticketPrice = +e.target.value;
 	//to get the index of movie and the value of movie = price
 	console.log(e.target.selectedIndex, e.target.value);
@@ -66,6 +76,8 @@ movieSelect.addEventListener('change', (e) => {
 // toggle class so we can unselect the seat aswell
 
 container.addEventListener('click', (e) => {
+	e.preventDefault();
+
 	if (
 		e.target.classList.contains('seat') &&
 		!e.target.classList.contains('occupied')
@@ -75,3 +87,6 @@ container.addEventListener('click', (e) => {
 		updateSelectedCount();
 	}
 });
+
+//initial count and total set
+updateSelectedCount();
